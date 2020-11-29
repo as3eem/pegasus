@@ -238,7 +238,7 @@ def xsum_transformer(param_overrides):
       }, param_overrides)
 
 
-path = "../data/testdata/test_pattern_1.tfrecords"
+path = "/media/data_dump/hemant/hemant/nlp/pegasus/pegasus/data/testdata/ami.tfrecords"
 @registry.register("ami_transformer")
 def test_transformer(param_overrides):
   return transformer_params(

@@ -1,6 +1,7 @@
 """my_dataset dataset."""
 
 import tensorflow_datasets as tfds
+import tensorflow as tf
 
 # TODO(my_dataset): Markdown description  that will appear on the catalog page.
 _DESCRIPTION = """
@@ -14,7 +15,6 @@ It should also contain any processing which has been applied (if any),
 _CITATION = """
 """
 
-
 class MyDataset(tfds.core.GeneratorBasedBuilder):
   """DatasetBuilder for my_dataset dataset."""
 
@@ -23,49 +23,42 @@ class MyDataset(tfds.core.GeneratorBasedBuilder):
       '1.0.0': 'Initial release.',
   }
 
-  def _info(self) -> tfds.core.DatasetInfo:
-    """Returns the dataset metadata."""
-    # TODO(my_dataset): Specifies the tfds.core.DatasetInfo object
-    return tfds.core.DatasetInfo(
-        builder=self,
-        description=_DESCRIPTION,
-        features=tfds.features.FeaturesDict({
-            "inputs":tf.string, 
-            "targets":tf.string
-        }),
-        # If there's a common (input, target) tuple from the
-        # features, specify them here. They'll be used if
-        # `as_supervised=True` in `builder.as_dataset`.
-        supervised_keys=('inputs', 'targets'),  # Set to `None` to disable
-        homepage='https://dataset-homepage/',
-        citation=_CITATION,
-    )
+#   def _info(self) -> tfds.core.DatasetInfo:
+#     """Returns the dataset metadata."""
+#     # TODO(my_dataset): Specifies the tfds.core.DatasetInfo object
+#     return tfds.core.DatasetInfo(
+#         builder=self,
+#         description=_DESCRIPTION,
+#         features=tfds.features.FeaturesDict({
+#             # These are the features of your dataset like images, labels ...
+#         }),
+#         # If there's a common (input, target) tuple from the
+#         # features, specify them here. They'll be used if
+#         # `as_supervised=True` in `builder.as_dataset`.
+#         supervised_keys=None,  # e.g. ('image', 'label')
+#         homepage='https://dataset-homepage/',
+#         citation=_CITATION,
+#     )
 
   def _split_generators(self, dl_manager: tfds.download.DownloadManager):
-    """Returns SplitGenerators."""
-    # TODO(my_dataset): Downloads the data and defines the splits
-    path = dl_manager.download_and_extract('/content/part-00000-77c4055a-9b49-4d01-a25e-263f1e03198b.tfrecords.gz')
-
-    # TODO(my_dataset): Returns the Dict[split names, Iterator[Key, Example]]
+    """Download the data and define splits."""
+    path_ = '/media/data_dump/hemant/hemant/nlp/pegasus/junk/pegasus/TF Create/tfrec.csv'
     return {
-        'train': self._generate_examples(path / 'train_imgs'),
+        'train': self._generate_examples(path=path_),
+        'validation': self._generate_examples(path=path_),
+        'test': self._generate_examples(path=path_),
     }
 
-#   def _generate_examples(self, path):
-#     """Yields examples."""
-#     # TODO(my_dataset): Yields (key, example) tuples from the dataset
-#     for f in path.glob('*.jpeg'):
-#       yield 'key', {
-#           'image': f,
-#           'label': 'yes',
-#       }
-
   def _generate_examples(self, path):
-    with tf.compat.v1.io.tf_record_iterator(path, options=None) as f:
-      for i, line in enumerate(f):
-        source, target = line.split(',')
-        yield i, {
-            'ipnuts': source,
-            'targets': target,
-        }
-        
+    with tf.io.gfile.GFile(path) as f:  # path to custom data
+        for i, line in enumerate(f):
+            source, target = line.split('\t')
+            yield i, {
+                    '_source': source,
+                    '_target': target,
+                        }
+
+    
+    # """Yields examples."""
+    # # TODO(my_dataset): Yields (key, example) tuples from the dataset
+    # yield 'key', {}
