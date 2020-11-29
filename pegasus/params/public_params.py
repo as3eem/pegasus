@@ -162,6 +162,7 @@ def aeslc_transformer(param_overrides):
       }, param_overrides)
 
 
+
 @registry.register("big_patent_transformer")
 def big_patent_transformer(param_overrides):
   return transformer_params(
@@ -231,6 +232,22 @@ def xsum_transformer(param_overrides):
           "test_pattern": "tfds:xsum-test",
           "max_input_len": 1024,
           "max_output_len": 64,
+          "train_steps": 30000,
+          "learning_rate": 0.0001,
+          "batch_size": 8,
+      }, param_overrides)
+
+
+path = "../data/testdata/test_pattern_1.tfrecords"
+@registry.register("ami_transformer")
+def test_transformer(param_overrides):
+  return transformer_params(
+      {
+          "train_pattern": path,
+          "dev_pattern": path,
+          "test_pattern": path,
+          "max_input_len": 1024,
+          "max_output_len": 256,
           "train_steps": 30000,
           "learning_rate": 0.0001,
           "batch_size": 8,

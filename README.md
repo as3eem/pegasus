@@ -101,6 +101,16 @@ python3 pegasus/bin/train.py --params=aeslc_transformer \
 --model_dir=ckpt/pegasus_ckpt/aeslc
 ```
 
+Fine Tune on AMI Dataset
+
+```
+python3 pegasus/bin/evaluate.py --params=ami_transformer \
+--param_overrides=vocab_filename=ckpt/pegasus_ckpt/c4.unigram.newline.10pct.96000.model,batch_size=1,beam_size=5,beam_alpha=0.6 \
+--model_dir=ckpt/pegasus_ckpt/
+```
+
+
+
 If you would like to finetune on a subset of dataset, please refer to the [example of input pattern](https://github.com/google-research/pegasus/blob/master/pegasus/data/datasets.py#L186).
 
 Evaluate on the finetuned dataset.
